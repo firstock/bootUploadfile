@@ -29,6 +29,9 @@ public class FileController {
         this.storageService= storageService;
     }
 
+    /**
+     * @aim file list
+     */
     @GetMapping("/")
     public String listUploadedFiles(Model model) throws IOException {
         model.addAttribute("files", storageService.loadAll().map(
@@ -39,6 +42,9 @@ public class FileController {
         return "uploadForm";
     }
 
+    /**
+     * @runtime after finding file & clicking upload button
+     */
     @PostMapping("/")
     public String handleFileUpload(@RequestParam("file") MultipartFile file,
                                    RedirectAttributes redirectAttributes){
@@ -52,6 +58,7 @@ public class FileController {
 
     /**
      *  except xml file (non-exactly)
+     * @return file download
      */
     @GetMapping("/files/{filename:.+\\.[^xml]+}")
     @ResponseBody
@@ -63,21 +70,36 @@ public class FileController {
 
 
 
-    //todo click> open xml file on browser> mod xml file
-    @GetMapping("/files/{filename:.+\\.xml}")
+    //todo click> open xml file on browser
+    @GetMapping(value= "/files/{filename:.+\\.xml}")
     @ResponseBody
-    public String modFile(@PathVariable String filename, Model model){
-        LOG.info("run modFile");
+    public ResponseEntity<Resource> viewFile(@PathVariable String filename) throws IOException {
+        Resource file= storageService.loadAsResource(filename);
 
-//        model.addAttribute("files", storageService.loadAll().map(
-//                path -> MvcUriComponentsBuilder.fromMethodName(FileController.class,
-//                        "serveFile", path.getFileName().toString()).build().toString())
-//                .collect(Collectors.toList())
-//        );
+        LOG.info("run viewFile: "+file);
 
         //todo how to show xmlFile??
-        return "modForm";
+        return ResponseEntity.ok().header(HttpHeaders.UPGRADE,
+                "attachment;").body(file);
     }
+
+    //todo mod click> can modify
+    @PostMapping("/files/{filename:.+\\.xml}")
+    @ResponseBody
+    public String modFile(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes){
+        LOG.info("run modFile");
+
+        storageService.store(file);
+        redirectAttributes.addFlashAttribute("message", "You successfully uploaded"
+                + file.getOriginalFilename()+ "!");
+
+        return "redirect:/";
+    }
+
+
+
+
+
 
     @ExceptionHandler(StorageFileNotFoundException.class)
     public ResponseEntity<?> handleStorageFileNotFound(StorageFileNotFoundException exc){
