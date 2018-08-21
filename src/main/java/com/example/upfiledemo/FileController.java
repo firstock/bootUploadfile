@@ -1,5 +1,7 @@
 package com.example.upfiledemo;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -18,26 +20,40 @@ import com.example.upfiledemo.storage.StorageFileNotFoundException;
 import com.example.upfiledemo.storage.StorageService;
 
 @Controller
-public class FileUploadController {
+public class FileController {
     private final StorageService storageService;
+    private static Logger LOG= LoggerFactory.getLogger(FileController.class);
 
     @Autowired
-    public FileUploadController(StorageService storageService){ // interface's var ??
+    public FileController(StorageService storageService){ // interface's var ??
         this.storageService= storageService;
     }
 
     @GetMapping("/")
     public String listUploadedFiles(Model model) throws IOException {
         model.addAttribute("files", storageService.loadAll().map(
-                path -> MvcUriComponentsBuilder.fromMethodName(FileUploadController.class,
+                path -> MvcUriComponentsBuilder.fromMethodName(FileController.class,
                         "serveFile", path.getFileName().toString()).build().toString())
                 .collect(Collectors.toList())
         );
         return "uploadForm";
     }
 
+    @PostMapping("/")
+    public String handleFileUpload(@RequestParam("file") MultipartFile file,
+                                   RedirectAttributes redirectAttributes){
 
-    @GetMapping("/files/{filename:.+}")
+        storageService.store(file);
+        redirectAttributes.addFlashAttribute("message", "You successfully uploaded"
+                + file.getOriginalFilename()+ "!");
+
+        return "redirect:/";
+    }
+
+    /**
+     *  except xml file (non-exactly)
+     */
+    @GetMapping("/files/{filename:.+\\.[^xml]+}")
     @ResponseBody
     public ResponseEntity<Resource> serveFile(@PathVariable String filename){
         Resource file= storageService.loadAsResource(filename);
@@ -45,15 +61,22 @@ public class FileUploadController {
                 "attachment; filename=\""+ file.getFilename()+ "\"").body(file);
     }
 
-    @PostMapping("/")
-    public String handleFileUpload(@RequestParam("file") MultipartFile file,
-                                  RedirectAttributes redirectAttributes){
 
-        storageService.store(file);
-        redirectAttributes.addFlashAttribute("message", "You successfully uploaded"
-                + file.getOriginalFilename()+ "!");
 
-        return "redirect:/";
+    //todo click> open xml file on browser> mod xml file
+    @GetMapping("/files/{filename:.+\\.xml}")
+    @ResponseBody
+    public String modFile(@PathVariable String filename, Model model){
+        LOG.info("run modFile");
+
+//        model.addAttribute("files", storageService.loadAll().map(
+//                path -> MvcUriComponentsBuilder.fromMethodName(FileController.class,
+//                        "serveFile", path.getFileName().toString()).build().toString())
+//                .collect(Collectors.toList())
+//        );
+
+        //todo how to show xmlFile??
+        return "modForm";
     }
 
     @ExceptionHandler(StorageFileNotFoundException.class)
