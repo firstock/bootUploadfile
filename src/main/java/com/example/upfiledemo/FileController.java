@@ -76,16 +76,21 @@ public class FileController {
     //todo click> open xml file on browser
     @GetMapping(value= "/files/{filename:.+\\.xml}")
     @ResponseBody
-    public String viewFile(@PathVariable String filename) throws IOException {
+    public ResponseEntity<Resource> viewFile(@PathVariable String filename) throws IOException {
         Resource file= storageService.loadAsResource(filename);
-        LOG.info("run viewFile: "+file);
-
-        InputStream inputStream= file.getInputStream();
-        String xmlView= IOUtils.toString(inputStream, Charset.defaultCharset());
-
-        //todo how to show xmlFile??
-        return xmlView;
+        return ResponseEntity.ok().header(HttpHeaders.UPGRADE,
+                "attachment; filename=\""+ file.getFilename()+ "\"").body(file);
     }
+//    public String viewFile(@PathVariable String filename) throws IOException {
+//        Resource file= storageService.loadAsResource(filename);
+//        LOG.info("run viewFile: "+file);
+//
+//        InputStream inputStream= file.getInputStream();
+//        String xmlView= IOUtils.toString(inputStream, Charset.defaultCharset());
+//
+//        //todo how to show xmlFile??
+//        return xmlView;
+//    }
 
     //todo mod click> can modify
     @PostMapping("/files/{filename:.+\\.xml}")
