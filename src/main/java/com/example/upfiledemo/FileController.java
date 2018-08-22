@@ -1,6 +1,5 @@
 package com.example.upfiledemo;
 
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +14,6 @@ import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBui
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.Charset;
 import java.util.stream.Collectors;
 
 import com.example.upfiledemo.storage.StorageFileNotFoundException;
@@ -72,8 +69,9 @@ public class FileController {
     }
 
 
-
-    //todo click> open xml file on browser
+    /**
+     * @showon Internet Explorer for formal xml file
+     */
     @GetMapping(value= "/files/{filename:.+\\.xml}")
     @ResponseBody
     public ResponseEntity<Resource> viewFile(@PathVariable String filename) throws IOException {
@@ -81,16 +79,6 @@ public class FileController {
         return ResponseEntity.ok().header(HttpHeaders.UPGRADE,
                 "attachment; filename=\""+ file.getFilename()+ "\"").body(file);
     }
-//    public String viewFile(@PathVariable String filename) throws IOException {
-//        Resource file= storageService.loadAsResource(filename);
-//        LOG.info("run viewFile: "+file);
-//
-//        InputStream inputStream= file.getInputStream();
-//        String xmlView= IOUtils.toString(inputStream, Charset.defaultCharset());
-//
-//        //todo how to show xmlFile??
-//        return xmlView;
-//    }
 
     //todo mod click> can modify
     @PostMapping("/files/{filename:.+\\.xml}")
