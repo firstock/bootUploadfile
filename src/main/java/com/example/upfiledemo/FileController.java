@@ -71,16 +71,19 @@ public class FileController {
 
     /**
      * @showon Internet Explorer for formal xml file
+     * todo modify mime type -> text/xml only
      */
     @GetMapping(value= "/files/{filename:.+\\.xml}")
     @ResponseBody
     public ResponseEntity<Resource> viewFile(@PathVariable String filename) throws IOException {
         Resource file= storageService.loadAsResource(filename);
-        return ResponseEntity.ok().header(HttpHeaders.UPGRADE,
-                "attachment; filename=\""+ file.getFilename()+ "\"").body(file);
+        LOG.info("run viewFile: "+file);
+        return ResponseEntity.ok().header(HttpHeaders.UPGRADE, "Accept: text/xml").body(file);
     }
 
-    //todo mod click> can modify
+    /**
+     *  todo
+     */
     @PostMapping("/files/{filename:.+\\.xml}")
     @ResponseBody
     public String modFile(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes){
