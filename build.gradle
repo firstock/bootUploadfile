@@ -30,4 +30,6 @@ dependencies {
     compileOnly('org.projectlombok:lombok')
     testCompile('org.springframework.boot:spring-boot-starter-test')
     compileOnly "org.springframework.boot:spring-boot-configuration-processor"
+    // https://mvnrepository.com/artifact/org.springframework/spring-oxm
+    compile group: 'org.springframework', name: 'spring-oxm'
 }
