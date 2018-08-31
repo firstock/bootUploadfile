@@ -12,6 +12,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 public class UpfiledemoApplication {
 
     public static void main(String[] args) {
+
         SpringApplication.run(UpfiledemoApplication.class, args);
     }
 
