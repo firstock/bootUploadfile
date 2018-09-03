@@ -3,14 +3,15 @@ package com.example.upfiledemo.oxmtest;
 
 import javax.xml.bind.annotation.*;
 
+@XmlRootElement(name = "dependency")
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name= "Project", propOrder = {    "groupId"
         ,"artifactId"
         ,"version"
         ,"scope"
 })
-@XmlRootElement(name = "dependency")
 public class Dependency {
+
     @XmlElement(name="GroupId")
     protected String groupId;
     @XmlElement(name="ArtifactId")
