@@ -17,7 +17,6 @@ public class AppConfig {
     @Bean
     public Jaxb2Marshaller getCastorMarshaller() {
         Jaxb2Marshaller jaxb2Marshaller = new Jaxb2Marshaller();
-//        jaxb2Marshaller.setPackagesToScan("com.concretepage.bean");
         jaxb2Marshaller.setPackagesToScan("com.example.upfiledemo.oxm");
 
         Map<String,Object> map = new HashMap<String,Object>();

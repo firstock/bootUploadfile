@@ -1,46 +1,20 @@
 package com.example.upfiledemo.oxm;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.*;
+import java.util.List;
 
-//@XmlRootElement(name="company-info", namespace="com.concretepage" )
-@XmlRootElement(name="company-info", namespace="com.example.upfiledemo.oxm" )
+//@XmlRootElement(name="MESSAGE", namespace="com.example.upfiledemo" )
+@XmlRootElement(name="MESSAGE")
 @XmlAccessorType(XmlAccessType.NONE)
 public class Company {
-    @XmlAttribute(name="id")
-    private Integer id;
-    @XmlElement(name="company-name")
-    private String companyName;
-    @XmlElement(name="ceo-name")
-    private String ceoName;
-    @XmlElement(name="no-emp")
-    private Integer noEmp;
+    @XmlElement(name="CODE", required = true)
+    private List<Code> code;
 
-    public Integer getId() {
-        return id;
+    public List<Code> getCode() {
+        return code;
     }
-    public void setId(Integer id) {
-        this.id = id;
-    }
-    public String getCompanyName() {
-        return companyName;
-    }
-    public void setCompanyName(String companyName) {
-        this.companyName = companyName;
-    }
-    public String getCeoName() {
-        return ceoName;
-    }
-    public void setCeoName(String ceoName) {
-        this.ceoName = ceoName;
-    }
-    public Integer getNoEmp() {
-        return noEmp;
-    }
-    public void setNoEmp(Integer noEmp) {
-        this.noEmp = noEmp;
+
+    public void setCode(List<Code> code) {
+        this.code = code;
     }
 }
