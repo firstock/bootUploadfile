@@ -2,7 +2,6 @@ package com.example.upfiledemo.oxm;
 
 import javax.xml.bind.annotation.*;
 
-//todo Code를 Company의 Code에 연결하기
 @XmlRootElement(name="CODE")
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlType(name = "Code", propOrder = { //name: 멤버변수명 그대로

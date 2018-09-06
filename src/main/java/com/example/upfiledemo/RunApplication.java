@@ -20,15 +20,13 @@ public class RunApplication {
         Processor processor = ctx.getBean(Processor.class);
 
         //Perform Marshaling
-        Company company1 = new Company(); //text가 없더라도 "" 라도 넣어줘야 태그가 생성된다
-
-
+        Company company1 = new Company(){};
         Code code1= new Code();
 
         code1.setId("CM_MSG_CODE_0001");
         code1.setKor("HAS Url을 입력하세요.");
         code1.setEng("Please enter HAS Url.");
-//        company1.getCode().add(code1); //todo error- xml depth_add list- why NOT ?? - Company에 제대로된 생성자??
+        company1.getCode().add(code1);
 
 
         processor.objectToXML("country.xml", company1);
