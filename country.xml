@@ -4,4 +4,8 @@
         <KOR>HAS Url을 입력하세요.</KOR>
         <ENG>Please enter HAS Url.</ENG>
     </CODE>
+    <CODE ID="CM_MSG_CODE_0002">
+        <KOR>입력한 Url 주소가 정상적이지 않습니다.다시 입력하세요.</KOR>
+        <ENG>The Url address you entered is not correct. Please enter it again.</ENG>
+    </CODE>
 </MESSAGE>
